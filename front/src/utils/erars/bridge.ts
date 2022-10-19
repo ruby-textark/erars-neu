@@ -42,6 +42,13 @@ declare global {
       function unmaximize(): Promise<void>;
       function minimize(): Promise<void>;
     }
+    namespace computer {
+      function getOSInfo(): Promise<{
+        name: string;
+        description: string;
+        version: string;
+      }>;
+    }
 
     function init(): void;
   }
@@ -53,7 +60,6 @@ declare global {
   }
 }
 
-const BINARY_PATH = `erars-stdio.exe`;
 const COMMON_FLAGS = [`--json`];
 const DEV_FLAGS = [`.\\eraTHYMKR`, `--log-level=trace`];
 const PROD_FLAGS = [`.`];
@@ -102,7 +108,13 @@ class ErarsBridge {
     if (this.erars) return;
 
     this.erars = { id: -1, pid: -1 };
-    this.erars = await Neutralino.os.spawnProcess(`${BINARY_PATH} ${FLAGS}`);
+
+    const { name } = await Neutralino.computer.getOSInfo();
+    const executable = name.includes("Windows")
+      ? "erars-stdio.exe"
+      : "erars-stdio";
+
+    this.erars = await Neutralino.os.spawnProcess(`${executable} ${FLAGS}`);
 
     Neutralino.events.on("spawnedProcess", (e) => {
       if (!e) return;
