@@ -1,0 +1,45 @@
+{
+  "applicationId": "net.textark.erarsneu",
+  "version": "1.0.0",
+  "defaultMode": "window",
+  "documentRoot": "/front/dist/",
+  "url": "/",
+  "port": 15173,
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "tokenSecurity": "one-time",
+  "exportAuthInfo": true,
+  "logging": {
+    "enabled": true,
+    "writeToLogFile": true
+  },
+  "modes": {
+    "window": {
+      "title": "erars-neu",
+      "width": 1280,
+      "height": 720,
+      "minWidth": 640,
+      "minHeight": 480,
+      "fullScreen": false,
+      "alwaysOnTop": false,
+      "icon": "/front/public/icon.png",
+      "enableInspector": true,
+      "borderless": true,
+      "maximize": false,
+      "hidden": false,
+      "resizable": true
+    }
+  },
+  "cli": {
+    "binaryName": "erars-neu",
+    "resourcesPath": "/front/dist/",
+    "extensionsPath": "/extensions/",
+    "clientLibrary": "/front/public/neutralino.js",
+    "binaryVersion": "4.7.0",
+    "clientVersion": "3.6.0",
+    "frontendLibrary": {
+      "patchFile": "/front/index.html",
+      "devUrl": "http://localhost:5173/"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+/**
+ * D2Coding
+ * https://github.com/naver/d2codingfont
+ */
+@font-face {
+  font-family: D2Coding;
+  font-weight: normal;
+  src: url("/D2Coding-Ver1.3.2-20180524.ttf");
+}
+@font-face {
+  font-family: D2Coding;
+  font-weight: bold;
+  src: url("/D2CodingBold-Ver1.3.2-20180524.ttf");
+}
+
+/**
+ * NanumGothic Coding
+ * https://github.com/naver/nanumfont
+ */
+@font-face {
+  font-family: NanumGothicCoding;
+  font-weight: normal;
+  src: url("/NanumGothicCoding.ttf");
+}
+@font-face {
+  font-family: NanumGothicCoding;
+  font-weight: bold;
+  src: url("/NanumGothicCoding-Bold.ttf");
+}
+
+/**
+ * Monoplex KR
+ * https://github.com/y-kim/monoplex
+ */
+@font-face {
+  font-family: Monoplex;
+  font-weight: normal;
+  src: url("/MonoplexKR-Regular.ttf");
+}
+@font-face {
+  font-family: Monoplex;
+  font-weight: bold;
+  src: url("/MonoplexKR-Bold.ttf");
+}
