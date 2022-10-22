@@ -82,7 +82,7 @@ function Titlebar() {
       };
     }
 
-    return () => {};
+    return () => undefined;
   }, [titlebarElement]);
 
   return (

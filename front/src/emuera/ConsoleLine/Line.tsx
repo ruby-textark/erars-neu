@@ -10,6 +10,7 @@ const Line = styled.div<{ textStyle: TextStyle }>`
 `;
 
 function LinePart({ part }: { part: TextType }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, textStyle] = part;
   return <Line textStyle={textStyle} />;
 }

@@ -81,7 +81,9 @@ class ErarsBridge {
               }
 
               this.stdoutBuffer = "";
-            } catch (err) {}
+            } catch (err) {
+              console.error(err);
+            }
             break;
           case "exit":
             this.erars = Promise.resolve({ id: -1, pid: -1 });
@@ -112,7 +114,7 @@ class ErarsBridge {
     await Neutralino.os.updateSpawnedProcess(
       id,
       "stdIn",
-      (input + "\r\n") as Object
+      (input + "\r\n") as unknown as object
     );
   }
 
@@ -161,7 +163,7 @@ class ErarsBridge {
     if (id >= 0) await Neutralino.os.updateSpawnedProcess(id, "exit");
   }
 
-  async close(needsCleanup: boolean = true) {
+  async close(needsCleanup = true) {
     if (needsCleanup) await this.cleanup();
     await Neutralino.app.exit();
   }

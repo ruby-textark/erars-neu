@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useEra } from "../../utils/erars/hooks";
-import { ButtonType, Color, TextStyle } from "../../utils/erars/types";
+import { ButtonType, Color } from "../../utils/erars/types";
 import TextPart from "./Text";
 
 const Button = styled.span<{

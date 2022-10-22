@@ -56,7 +56,7 @@ class Hooks {
       read();
     },
 
-    sendInput: async (input: string = "") => {
+    sendInput: async (input = "") => {
       const { lines } = get();
       set({
         lines: lines

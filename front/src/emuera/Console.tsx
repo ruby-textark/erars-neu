@@ -4,7 +4,6 @@ import { useEra } from "../utils/erars/hooks";
 import useEmulatorSettings from "../utils/settings";
 import ConsoleLineElement from "./ConsoleLine";
 import EmueraInput from "./Input";
-import SettingsButton from "./EmulatorSettings";
 import type { EmulatorSettings } from "../utils/settings/types";
 import EmulatorSettingsDialog from "./EmulatorSettings/Dialog";
 import { useInput } from "../utils/console/input";

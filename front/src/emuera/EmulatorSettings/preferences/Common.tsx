@@ -7,6 +7,7 @@ const PrefWrapper = styled.div`
   gap: 1em;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function PreferencesDiv({ children }: { children: any }) {
   return <PrefWrapper>{children}</PrefWrapper>;
 }
