@@ -1,13 +1,6 @@
-type BuiltinFonts = "Monoplex" | "D2Coding" | "NanumGothicCoding";
-export const BuiltinFontNames: BuiltinFonts[] = [
-  "Monoplex",
-  // "D2Coding",
-  // "NanumGothicCoding",
-];
-
 type EmulatorSettings = {
   // Font preferences
-  fontFamily: BuiltinFonts | string;
+  fontFamily: string;
   fontSize: number;
   fauxRender: boolean;
 
@@ -24,4 +17,4 @@ type EmulatorSettings = {
   dialog: (dialogOpen: boolean) => void;
 };
 
-export type { BuiltinFonts, EmulatorSettings };
+export type { EmulatorSettings };

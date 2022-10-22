@@ -24,7 +24,8 @@ const Text = styled.span<{
   emulatorSettings: EmulatorSettings;
 }>`
   color: rgb(${({ textStyle }) => textStyle.color.join(",")});
-  font-family: ${({ textStyle }) => textStyle.font_family};
+  font-family: ${({ textStyle }) => textStyle.font_family}, ui-monospace,
+    monospace;
 
   &.bold {
     font-weight: bold;

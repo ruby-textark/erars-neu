@@ -1,8 +1,8 @@
 import type { EmueraResponse } from "./types";
 import "./neutralino.d.ts";
 
-const COMMON_FLAGS = [`--json`];
-const DEV_FLAGS = [`.\\eraTHYMKR`, `--log-level=trace`];
+const COMMON_FLAGS = [`--json`, `--log-level=trace`];
+const DEV_FLAGS = [`.\\eraTHYMKR`];
 const PROD_FLAGS = [`.`];
 
 const FLAGS = COMMON_FLAGS.concat(
@@ -76,7 +76,7 @@ class ErarsBridge {
             } catch (err) {}
             break;
           case "exit":
-            this.close(false);
+            this.erars = Promise.resolve({ id: -1, pid: -1 });
             break;
         }
       }
@@ -150,7 +150,7 @@ class ErarsBridge {
 
   async cleanup() {
     const { id } = await this.erars;
-    await Neutralino.os.updateSpawnedProcess(id, "exit");
+    if (id >= 0) await Neutralino.os.updateSpawnedProcess(id, "exit");
   }
 
   async close(needsCleanup: boolean = true) {

@@ -1,12 +1,5 @@
-import Creatable from "react-select/creatable";
 import useEmulatorSettings from "../../../utils/settings";
-import { BuiltinFontNames } from "../../../utils/settings/types";
 import PreferencesDiv, { PreferencesCheck, PreferencesText } from "./Common";
-
-const builtinFonts = BuiltinFontNames.map((fontName) => ({
-  value: fontName,
-  label: fontName,
-}));
 
 function FontPreferences() {
   const emulatorSettings = useEmulatorSettings();
@@ -14,17 +7,9 @@ function FontPreferences() {
   return (
     <PreferencesDiv>
       Font Family
-      <Creatable
-        options={builtinFonts}
-        defaultValue={{
-          value: emulatorSettings.fontFamily,
-          label: emulatorSettings.fontFamily,
-        }}
-        onChange={(value) =>
-          emulatorSettings.setFontFamily(
-            value?.value ?? emulatorSettings.fontFamily
-          )
-        }
+      <PreferencesText
+        value={emulatorSettings.fontFamily}
+        onChange={({ target }) => emulatorSettings.setFontFamily(target.value)}
       />
       Font Size(px)
       <PreferencesText

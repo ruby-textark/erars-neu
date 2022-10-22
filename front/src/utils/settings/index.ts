@@ -3,7 +3,7 @@ import { EmulatorSettings } from "./types";
 
 const useEmulatorSettings = create<EmulatorSettings>((set) => ({
   // Font preferences
-  fontFamily: "Monoplex",
+  fontFamily: "DotumChe",
   fontSize: 16,
   fauxRender: true,
 
