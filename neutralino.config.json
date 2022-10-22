@@ -4,7 +4,6 @@
   "defaultMode": "window",
   "documentRoot": "/front/dist/",
   "url": "/",
-  "port": 15173,
   "enableServer": true,
   "enableNativeAPI": true,
   "tokenSecurity": "one-time",

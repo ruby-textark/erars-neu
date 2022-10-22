@@ -10,12 +10,14 @@ const FLAGS = COMMON_FLAGS.concat(
 ).join(" ");
 
 class ErarsBridge {
-  erars?: { id: number; pid: number };
+  erars: Promise<{ id: number; pid: number }>;
   stdoutBuffer: string;
   stdoutPromise?: Promise<EmueraResponse>;
   stdoutResolve?: (value: EmueraResponse) => void;
 
   constructor() {
+    this.stdoutBuffer = "";
+
     if (import.meta.env.DEV) {
       /**
        * See Neutralinojs Issue #902
@@ -39,28 +41,24 @@ class ErarsBridge {
         ];
       }
     }
-
-    this.stdoutBuffer = "";
-
     Neutralino.init();
+    this.erars = this.launch();
   }
 
   async launch() {
-    if (this.erars) return;
-
-    this.erars = { id: -1, pid: -1 };
-
     const { name } = await Neutralino.computer.getOSInfo();
     const executable = name.includes("Windows")
       ? "erars-stdio.exe"
       : "erars-stdio";
 
-    this.erars = await Neutralino.os.spawnProcess(`${executable} ${FLAGS}`);
+    const { id, pid } = await Neutralino.os.spawnProcess(
+      `${executable} ${FLAGS}`
+    );
 
     Neutralino.events.on("spawnedProcess", (e) => {
       if (!e) return;
 
-      if (e?.detail.id === this.erars?.id) {
+      if (e?.detail.id === id) {
         switch (e.detail.action) {
           case "stdOut":
           case "stdErr":
@@ -78,25 +76,33 @@ class ErarsBridge {
             } catch (err) {}
             break;
           case "exit":
-            this.close();
+            this.close(false);
             break;
         }
       }
     });
 
+    window.addEventListener("keydown", (e) => {
+      const { key, altKey } = e;
+      if (key === "F4" && altKey) {
+        this.close();
+      }
+    });
     Neutralino.events.on("windowClose", () => {
-      this.cleanup();
+      this.close();
     });
 
-    await this.setupTitlebar();
+    console.log(id);
+
+    return { id, pid };
   }
 
   async stdin(input: string) {
-    if (!this.erars) return;
+    const { id } = await this.erars;
     console.log(input + "\n");
 
     await Neutralino.os.updateSpawnedProcess(
-      this.erars.id,
+      id,
       "stdIn",
       (input + "\r\n") as Object
     );
@@ -115,8 +121,11 @@ class ErarsBridge {
     });
   }
 
-  setupTitlebar = () => {
-    return Neutralino.window.setDraggableRegion("titlebar");
+  setDraggableRegion = (element: HTMLElement) => {
+    return Neutralino.window.setDraggableRegion(element);
+  };
+  unsetDraggableRegion = (element: HTMLElement) => {
+    return Neutralino.window.unsetDraggableRegion(element);
   };
 
   isMaximized = () => {
@@ -140,12 +149,12 @@ class ErarsBridge {
   }
 
   async cleanup() {
-    if (this.erars && this.erars.pid > 0)
-      await Neutralino.os.updateSpawnedProcess(this.erars.id, "exit");
+    const { id } = await this.erars;
+    await Neutralino.os.updateSpawnedProcess(id, "exit");
   }
 
-  async close() {
-    if (this.erars) await this.cleanup();
+  async close(needsCleanup: boolean = true) {
+    if (needsCleanup) await this.cleanup();
     await Neutralino.app.exit();
   }
 }

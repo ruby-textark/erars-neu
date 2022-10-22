@@ -35,6 +35,7 @@ export declare global {
     }
     namespace window {
       function setDraggableRegion(domId: string | HTMLElement): Promise<void>;
+      function unsetDraggableRegion(domId: string | HTMLElement): Promise<void>;
       function isMaximized(): Promise<boolean>;
       function maximize(): Promise<void>;
       function unmaximize(): Promise<void>;

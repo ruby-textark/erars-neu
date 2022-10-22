@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import bridge from "./utils/erars/bridge";
 
@@ -70,11 +70,25 @@ const CloseButton = styled.div`
 
 function Titlebar() {
   const [isMaximized, setIsMaximized] = useState(false);
+  const titlebarElement = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const dragZone = titlebarElement.current;
+    if (dragZone) {
+      bridge.setDraggableRegion(dragZone);
+
+      return () => {
+        bridge.unsetDraggableRegion(dragZone);
+      };
+    }
+
+    return () => {};
+  }, [titlebarElement]);
 
   return (
     <TitlebarContent>
       <DragArea />
-      <TitleText id="titlebar">{document.title}</TitleText>
+      <TitleText ref={titlebarElement}>{document.title}</TitleText>
       <TitleButtonArea>
         <NormalButton onClick={() => bridge.minimize()}>
           <i className="fa-regular fa-window-minimize" />

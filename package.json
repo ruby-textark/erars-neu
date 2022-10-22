@@ -4,7 +4,7 @@
   "description": "erars-neutralino",
   "main": "index.js",
   "scripts": {
-    "dev:vite": "wait-on tcp:15173 && vite --host",
+    "dev:vite": "vite --host",
     "dev:neu": "neu run --frontend-lib-dev",
     "build:vite": "tsc -p front && vite build",
     "build:neu": "neu build --release",
@@ -23,13 +23,11 @@
     "concurrently": "^7.4.0",
     "neutralinojs-types": "^2.0.0",
     "typescript": "^4.8.4",
-    "vite": "^3.1.8",
-    "wait-on": "^6.0.1"
+    "vite": "^3.1.8"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.2",
     "react-select": "^5.5.2",
     "styled-components": "^5.3.6",
     "zustand": "^4.1.2"
