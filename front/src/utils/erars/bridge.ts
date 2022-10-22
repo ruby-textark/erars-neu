@@ -1,5 +1,5 @@
 import type { EmueraResponse } from "./types";
-import "./neutralino.d.ts";
+import "./neutralino.ts";
 
 const COMMON_FLAGS = [`--json`, `--log-level=trace`];
 const DEV_FLAGS = [`.\\eraTHYMKR`];
@@ -8,6 +8,14 @@ const PROD_FLAGS = [`.`];
 const FLAGS = COMMON_FLAGS.concat(
   import.meta.env.DEV ? DEV_FLAGS : PROD_FLAGS
 ).join(" ");
+
+declare global {
+  interface Window {
+    NL_PORT: number;
+    NL_TOKEN: string;
+    NL_ARGS: string[];
+  }
+}
 
 class ErarsBridge {
   erars: Promise<{ id: number; pid: number }>;

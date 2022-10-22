@@ -1,6 +1,4 @@
-export declare global {
-  type LaunchState = "init" | "launching" | "ready" | "fail";
-
+declare global {
   namespace Neutralino {
     namespace app {
       function exit(exitCode?: number): Promise<void>;
@@ -58,3 +56,5 @@ export declare global {
     NL_ARGS: string[];
   }
 }
+
+export {};
