@@ -15,9 +15,7 @@ class JsonStream<T> {
   }
 
   async sink() {
-    while (true) {
-      console.log(this.cursor);
-      console.log(this.buffer);
+    for (;;) {
       while (this.cursor < this.buffer.length) {
         const stackTop = this.stack[this.stack.length - 1];
         const currentChar = this.buffer[this.cursor];
@@ -26,6 +24,7 @@ class JsonStream<T> {
           switch (currentChar) {
             case '"':
               this.stack.pop();
+              break;
             default:
               break;
           }
@@ -64,9 +63,7 @@ class JsonStream<T> {
     if (!this.lock) {
       this.lock = new Promise<void>((resolve) => {
         this.wakeup = resolve;
-      }).then(() => {
-        this.lock = undefined;
-      });
+      }).then(() => (this.lock = undefined));
     }
 
     return this.lock;
