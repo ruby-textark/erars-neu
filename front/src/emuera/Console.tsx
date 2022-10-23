@@ -95,7 +95,7 @@ function Console() {
         }}
       >
         {era.lines.map((line, idx) => {
-          const lineNo = idx + era.from;
+          const lineNo = idx;
           return <ConsoleLineElement key={lineNo} line={line} />;
         })}
         <EmueraInput />

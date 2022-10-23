@@ -49,7 +49,6 @@ type EmueraResponse = {
 };
 
 type EmueraState = {
-  from: number;
   read: () => Promise<void>;
   sendInput: (input?: string) => Promise<void>;
 } & EmueraResponse;

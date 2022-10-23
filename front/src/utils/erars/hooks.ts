@@ -21,10 +21,8 @@ class Hooks {
 
     rebuild: false,
 
-    from: 0,
-
     read: async () => {
-      const { lines, from, read } = get();
+      const { lines, read } = get();
 
       // Request after current line number.
       const resp = await bridge.stdout();
@@ -36,22 +34,28 @@ class Hooks {
         return line.parts !== undefined;
       });
 
-      // Concatenate with existing lines.
-      const accLines = lines.concat(
-        responseLines
-          // Activate new lines
-          .map((line) => ({ ...line, active: true }))
-      );
+      if (resp.rebuild) {
+        set({
+          ...resp,
+          lines: resp.lines,
+        });
+      } else {
+        // Concatenate with existing lines.
+        let accLines = lines.concat(
+          responseLines
+            // Activate new lines
+            .map((line) => ({ ...line, active: true }))
+        );
 
-      set({
-        ...resp,
-        lines: accLines,
-        from: from + responseLines.length,
-      });
+        // Slice lines if the length exceeds max line cap.
+        if (accLines.length > this.maxLines)
+          accLines = accLines.slice(accLines.length - this.maxLines);
 
-      // Slice lines if the length exceeds max line cap.
-      if (accLines.length > this.maxLines)
-        set({ lines: accLines.slice(accLines.length - this.maxLines) });
+        set({
+          ...resp,
+          lines: accLines,
+        });
+      }
 
       read();
     },
