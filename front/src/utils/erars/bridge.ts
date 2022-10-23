@@ -1,5 +1,6 @@
-import type { EmueraResponse } from "./types";
+import { EmueraResponse } from "./types";
 import "./neutralino.ts";
+import JsonStream from "./stream";
 
 const COMMON_FLAGS = [`--json`, `--log-level=trace`];
 const DEV_FLAGS = [`.\\eraTHYMKR`];
@@ -19,12 +20,10 @@ declare global {
 
 class ErarsBridge {
   erars: Promise<{ id: number; pid: number }>;
-  stdoutBuffer: string;
-  stdoutPromise?: Promise<EmueraResponse>;
-  stdoutResolve?: (value: EmueraResponse) => void;
+  stdoutStream: JsonStream<EmueraResponse>;
 
   constructor() {
-    this.stdoutBuffer = "";
+    this.stdoutStream = new JsonStream();
 
     if (import.meta.env.DEV) {
       /**
@@ -49,6 +48,7 @@ class ErarsBridge {
         ];
       }
     }
+
     Neutralino.init();
     this.erars = this.launch();
   }
@@ -66,24 +66,13 @@ class ErarsBridge {
     Neutralino.events.on("spawnedProcess", (e) => {
       if (!e) return;
 
-      if (e?.detail.id === id) {
+      if (e.detail.id === id) {
         switch (e.detail.action) {
           case "stdOut":
+            this.stdoutStream.source(e.detail.data);
+            break;
           case "stdErr":
-            this.stdoutBuffer += e.detail.data;
-            try {
-              const json = JSON.parse(this.stdoutBuffer);
-
-              if (!this.stdoutPromise) {
-                this.stdoutPromise = Promise.resolve(json);
-              } else {
-                this.stdoutResolve?.(json);
-              }
-
-              this.stdoutBuffer = "";
-            } catch (err) {
-              console.error(err);
-            }
+            console.error(e.detail.data);
             break;
           case "exit":
             this.erars = Promise.resolve({ id: -1, pid: -1 });
@@ -119,16 +108,7 @@ class ErarsBridge {
   }
 
   stdout() {
-    if (!this.stdoutPromise) {
-      this.stdoutPromise = new Promise((resolve) => {
-        this.stdoutResolve = resolve;
-      });
-    }
-
-    return this.stdoutPromise.then((result) => {
-      this.stdoutPromise = undefined;
-      return result;
-    });
+    return this.stdoutStream.sink();
   }
 
   setDraggableRegion = (element: HTMLElement) => {
