@@ -41,11 +41,14 @@ class Hooks {
         });
       } else {
         // Concatenate with existing lines.
-        let accLines = lines.concat(
-          responseLines
-            // Activate new lines
-            .map((line) => ({ ...line, active: true }))
-        );
+        let accLines = lines
+          // Deactive existing lines
+          .map((line) => ({ ...line, active: false }))
+          .concat(
+            responseLines
+              // Activate new lines
+              .map((line) => ({ ...line, active: true }))
+          );
 
         // Slice lines if the length exceeds max line cap.
         if (accLines.length > this.maxLines)
@@ -63,25 +66,22 @@ class Hooks {
     sendInput: async (input = "") => {
       const { lines } = get();
       set({
-        lines: lines
-          .concat([
-            {
-              parts: [
-                {
-                  Text: [
-                    input,
-                    {
-                      color: [255, 255, 255],
-                      font_family: "",
-                      font_style: { bits: FontStyleBit.NORMAL },
-                    },
-                  ],
-                },
-              ],
-            },
-          ])
-          // Deactive existing lines
-          .map((line) => ({ ...line, active: false })),
+        lines: lines.concat([
+          {
+            parts: [
+              {
+                Text: [
+                  input,
+                  {
+                    color: [255, 255, 255],
+                    font_family: "",
+                    font_style: { bits: FontStyleBit.NORMAL },
+                  },
+                ],
+              },
+            ],
+          },
+        ]),
       });
 
       await bridge.stdin(input);
