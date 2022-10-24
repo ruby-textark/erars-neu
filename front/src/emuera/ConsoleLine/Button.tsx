@@ -20,7 +20,7 @@ function ButtonPart({
   active?: boolean;
 }) {
   const era = useEra();
-  const [segements, value] = part;
+  const [segements, _, value] = part;
 
   return active ? (
     <Button

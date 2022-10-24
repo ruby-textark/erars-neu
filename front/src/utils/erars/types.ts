@@ -25,6 +25,7 @@ type TextType = [string, TextStyle];
 type LineType = [string, TextStyle];
 type ButtonType = [
   [string, TextStyle][],
+  number,
   { Int: number; String: undefined } | { Int: undefined; String: string }
 ];
 
