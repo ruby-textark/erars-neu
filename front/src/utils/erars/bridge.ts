@@ -2,8 +2,8 @@ import { EmueraResponse } from "./types";
 import "./neutralino.ts";
 import JsonStream from "./stream";
 
-const COMMON_FLAGS = [`--json`, `--log-level=trace`];
-const DEV_FLAGS = [`.\\eraTHYMKR`];
+const COMMON_FLAGS = [`--json`];
+const DEV_FLAGS = [`.\\eraTHYMKR`, `--log-level=trace`];
 const PROD_FLAGS = [`.`];
 
 const FLAGS = COMMON_FLAGS.concat(
