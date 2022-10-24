@@ -86,7 +86,14 @@ function Titlebar() {
   }, [titlebarElement]);
 
   return (
-    <TitlebarContent>
+    <TitlebarContent
+      onDoubleClick={() =>
+        bridge
+          .toggleMaximize()
+          .then(() => bridge.isMaximized())
+          .then((isMaximized) => setIsMaximized(isMaximized))
+      }
+    >
       <DragArea />
       <TitleText ref={titlebarElement}>{document.title}</TitleText>
       <TitleButtonArea>
