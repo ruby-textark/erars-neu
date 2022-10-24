@@ -2,93 +2,86 @@ import { EmueraState, FontStyleBit } from "./types";
 import bridge from "./bridge";
 import create from "zustand";
 
-class Hooks {
-  maxLines: number;
+const useEra = create<EmueraState>((set, get) => ({
+  current_req: {
+    generation: 0,
+    is_one: false,
+    ty: "AnyKey",
+  },
+  bg_color: [0, 0, 0],
+  hl_color: [255, 255, 0],
+  lines: [],
+  maxLines: 2000,
 
-  constructor() {
-    this.maxLines = 2000;
-  }
+  rebuild: false,
 
-  useEra = create<EmueraState>((set, get) => ({
-    current_req: {
-      generation: 0,
-      is_one: false,
-      ty: "AnyKey",
-    },
-    bg_color: [0, 0, 0],
-    hl_color: [255, 255, 0],
-    lines: [],
+  read: async () => {
+    const { lines, maxLines, read } = get();
 
-    rebuild: false,
+    // Request after current line number.
+    const resp = await bridge.stdout();
 
-    read: async () => {
-      const { lines, read } = get();
+    console.log(resp);
 
-      // Request after current line number.
-      const resp = await bridge.stdout();
-
-      console.log(resp);
-
-      // Trim empty lines.
-      const responseLines = resp.lines.filter((line) => {
+    // Trim empty lines.
+    const responseLines = resp.lines
+      .filter((line) => {
         return line.parts !== undefined;
-      });
+      })
+      .concat(resp.last_line ?? []);
 
-      if (resp.rebuild) {
-        set({
-          ...resp,
-          lines: resp.lines,
-        });
-      } else {
-        // Concatenate with existing lines.
-        let accLines = lines
-          // Deactive existing lines
-          .map((line) => ({ ...line, active: false }))
-          .concat(
-            responseLines
-              // Activate new lines
-              .map((line) => ({ ...line, active: true }))
-          );
-
-        // Slice lines if the length exceeds max line cap.
-        if (accLines.length > this.maxLines)
-          accLines = accLines.slice(accLines.length - this.maxLines);
-
-        set({
-          ...resp,
-          lines: accLines,
-        });
-      }
-
-      read();
-    },
-
-    sendInput: async (input = "") => {
-      const { lines } = get();
+    if (resp.rebuild) {
       set({
-        lines: lines.concat([
-          {
-            parts: [
-              {
-                Text: [
-                  input,
-                  {
-                    color: [255, 255, 255],
-                    font_family: "",
-                    font_style: { bits: FontStyleBit.NORMAL },
-                  },
-                ],
-              },
-            ],
-          },
-        ]),
+        ...resp,
+        lines: resp.lines,
       });
+    } else {
+      // Concatenate with existing lines.
+      let accLines = lines
+        // Deactive existing lines
+        .map((line) => ({ ...line, active: false }))
+        .concat(
+          responseLines
+            // Activate new lines
+            .map((line) => ({ ...line, active: true }))
+        );
 
-      await bridge.stdin(input);
-    },
-  }));
-}
+      // Slice lines if the length exceeds max line cap.
+      if (accLines.length > maxLines)
+        accLines = accLines.slice(accLines.length - maxLines);
 
-const singletonInstance = new Hooks();
-export const { useEra } = singletonInstance;
-export default singletonInstance;
+      set({
+        ...resp,
+        lines: accLines,
+      });
+    }
+
+    read();
+  },
+
+  sendInput: async (input = "") => {
+    const { lines } = get();
+    set({
+      lines: lines.concat([
+        {
+          parts: [
+            {
+              Text: [
+                input,
+                {
+                  color: [255, 255, 255],
+                  font_family: "",
+                  font_style: { bits: FontStyleBit.NORMAL },
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+    });
+
+    await bridge.stdin(input);
+  },
+}));
+
+export { useEra };
