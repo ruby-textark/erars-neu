@@ -34,7 +34,7 @@
     "resourcesPath": "/front/dist/",
     "extensionsPath": "/extensions/",
     "clientLibrary": "/front/public/neutralino.js",
-    "binaryVersion": "4.7.0",
+    "binaryVersion": "4.8.0",
     "clientVersion": "3.6.0",
     "frontendLibrary": {
       "patchFile": "/front/index.html",
