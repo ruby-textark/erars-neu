@@ -52,7 +52,7 @@ type EmueraResponse = {
 type EmueraState = {
   maxLines: number;
   read: () => Promise<void>;
-  sendInput: (input?: string) => Promise<void>;
+  sendInput: (input?: string) => void;
 } & EmueraResponse;
 
 export { FontStyleBit };

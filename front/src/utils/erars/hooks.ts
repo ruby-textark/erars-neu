@@ -16,10 +16,9 @@ const useEra = create<EmueraState>((set, get) => ({
   rebuild: false,
 
   read: async () => {
-    const { lines, maxLines, read } = get();
-
     // Request after current line number.
     const resp = await bridge.stdout();
+    const { lines, maxLines, read } = get();
 
     console.log(resp);
 
@@ -31,20 +30,14 @@ const useEra = create<EmueraState>((set, get) => ({
       .concat(resp.last_line ?? []);
 
     if (resp.rebuild) {
-      set({
-        ...resp,
-        lines: resp.lines,
-      });
+      set(resp);
     } else {
       // Concatenate with existing lines.
-      let accLines = lines
-        // Deactive existing lines
-        .map((line) => ({ ...line, active: false }))
-        .concat(
-          responseLines
-            // Activate new lines
-            .map((line) => ({ ...line, active: true }))
-        );
+      let accLines = lines.concat(
+        responseLines
+          // Activate new lines
+          .map((line) => ({ ...line, active: true }))
+      );
 
       // Slice lines if the length exceeds max line cap.
       if (accLines.length > maxLines)
@@ -59,28 +52,30 @@ const useEra = create<EmueraState>((set, get) => ({
     read();
   },
 
-  sendInput: async (input = "") => {
-    const { lines } = get();
-    set({
-      lines: lines.concat([
-        {
-          parts: [
-            {
-              Text: [
-                input,
-                {
-                  color: [255, 255, 255],
-                  font_family: "",
-                  font_style: { bits: FontStyleBit.NORMAL },
-                },
-              ],
-            },
-          ],
-        },
-      ]),
-    });
+  sendInput: (input = "") => {
+    set(({ lines }) => ({
+      lines: lines
+        .concat([
+          {
+            parts: [
+              {
+                Text: [
+                  input,
+                  {
+                    color: [255, 255, 255],
+                    font_family: "",
+                    font_style: { bits: FontStyleBit.NORMAL },
+                  },
+                ],
+              },
+            ],
+          },
+        ])
+        // Deactive existing lines
+        .map((line) => ({ ...line, active: false })),
+    }));
 
-    await bridge.stdin(input);
+    bridge.stdin(input);
   },
 }));
 
