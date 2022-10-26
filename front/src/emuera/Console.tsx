@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "preact/hooks";
 import styled from "styled-components";
 import { useEra } from "../utils/erars/hooks";
 import useEmulatorSettings from "../utils/settings";
@@ -54,6 +54,7 @@ function Console() {
   const displayRef = useRef<HTMLDivElement>(null);
   const [skipFlag, setSkipFlag] = useState(false);
 
+  console.log(era.lines);
   useInput();
 
   useEffect(() => {

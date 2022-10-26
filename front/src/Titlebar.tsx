@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "preact/hooks";
 import styled from "styled-components";
 import bridge from "./utils/erars/bridge";
 

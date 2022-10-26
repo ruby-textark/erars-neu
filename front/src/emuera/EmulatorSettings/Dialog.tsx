@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from "preact/hooks";
 import styled from "styled-components";
 import SettingsButton from ".";
 import useEmulatorSettings from "../../utils/settings";
