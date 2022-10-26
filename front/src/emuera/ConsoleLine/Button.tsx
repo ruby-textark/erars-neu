@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useCallback } from "preact/hooks";
 import { useEra } from "../../utils/erars/hooks";
 import { ButtonType, Color } from "../../utils/erars/types";
 import TextPart from "./Text";
@@ -6,8 +7,11 @@ import TextPart from "./Text";
 const Button = styled.span<{
   hl_color: Color;
 }>`
-  cursor: pointer;
-  & span:hover {
+  &.active {
+    cursor: pointer;
+  }
+
+  &.active span:hover {
     color: rgb(${({ hl_color }) => hl_color.join(",")});
   }
 `;
@@ -22,23 +26,20 @@ function ButtonPart({
   const era = useEra();
   const [segements, _, value] = part;
 
-  return active ? (
+  const buttonCallback = useCallback(() => {
+    if (active) era.sendInput((value.Int ?? value.String).toString() ?? "");
+  }, [active]);
+
+  return (
     <Button
+      className={active ? "active" : ""}
       hl_color={era.hl_color}
-      onClick={() => {
-        era.sendInput((value.Int ?? value.String).toString() ?? "");
-      }}
+      onClick={buttonCallback}
     >
       {segements.map((text, textIdx) => {
         return <TextPart key={textIdx} part={text} />;
       })}
     </Button>
-  ) : (
-    <>
-      {segements.map((text, textIdx) => {
-        return <TextPart key={textIdx} part={text} />;
-      })}
-    </>
   );
 }
 
