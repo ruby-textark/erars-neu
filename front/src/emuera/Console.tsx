@@ -72,7 +72,7 @@ function Console() {
     if (era.current_req?.ty === "Int" || era.current_req?.ty === "Str") {
       setSkipFlag(false);
     } else if (skipFlag) {
-      era.sendInput().then(() => setSkipFlag(true));
+      era.sendInput();
     }
   }, [era.current_req, skipFlag]);
 

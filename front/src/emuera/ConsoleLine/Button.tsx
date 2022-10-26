@@ -24,6 +24,7 @@ function ButtonPart({
   active?: boolean;
 }) {
   const era = useEra();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [segements, _, value] = part;
 
   const buttonCallback = useCallback(() => {
