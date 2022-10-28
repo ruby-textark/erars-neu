@@ -33,6 +33,15 @@ declare global {
       }
     }
     namespace window {
+      function setSize(options: {
+        width?: number;
+        height?: number;
+        minWidth?: number;
+        minHeight?: number;
+        maxWidth?: number;
+        maxHeight?: number;
+        resizable?: boolean;
+      }): Promise<void>;
       function setDraggableRegion(domId: string | HTMLElement): Promise<void>;
       function unsetDraggableRegion(domId: string | HTMLElement): Promise<void>;
       function isMaximized(): Promise<boolean>;

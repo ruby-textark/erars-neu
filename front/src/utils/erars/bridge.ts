@@ -50,6 +50,7 @@ class ErarsBridge {
     }
 
     Neutralino.init();
+    Neutralino.window.setSize({ resizable: true });
     this.erars = this.launch();
   }
 

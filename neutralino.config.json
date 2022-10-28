@@ -19,14 +19,9 @@
       "height": 720,
       "minWidth": 640,
       "minHeight": 480,
-      "fullScreen": false,
-      "alwaysOnTop": false,
       "icon": "/front/public/icon.png",
       "enableInspector": true,
-      "borderless": true,
-      "maximize": false,
-      "hidden": false,
-      "resizable": true
+      "borderless": true
     }
   },
   "cli": {
