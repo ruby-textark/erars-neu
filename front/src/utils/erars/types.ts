@@ -35,6 +35,7 @@ type ConsoleLinePart = {
   Button?: ButtonType;
 };
 type ConsoleLine = {
+  align?: "Center" | "Left" | "Right";
   parts: ConsoleLinePart[];
   /** @description true if this line was included in the last response. */
   active?: boolean;
