@@ -70,7 +70,7 @@ class ErarsBridge {
       if (e.detail.id === id) {
         switch (e.detail.action) {
           case "stdOut":
-            this.stdoutStream.source(e.detail.data);
+            this.stdoutStream.write(e.detail.data);
             break;
           case "stdErr":
             console.error(e.detail.data);
@@ -109,7 +109,7 @@ class ErarsBridge {
   }
 
   stdout() {
-    return this.stdoutStream.sink();
+    return this.stdoutStream.read();
   }
 
   setDraggableRegion = (element: HTMLElement) => {

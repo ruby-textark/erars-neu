@@ -1,6 +1,6 @@
 {
   "applicationId": "net.textark.erarsneu",
-  "version": "1.0.0",
+  "version": "0.4.0",
   "defaultMode": "window",
   "documentRoot": "/front/dist/",
   "url": "/",

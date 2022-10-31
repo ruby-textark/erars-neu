@@ -54,7 +54,6 @@ function Console() {
   const displayRef = useRef<HTMLDivElement>(null);
   const [skipFlag, setSkipFlag] = useState(false);
 
-  console.log(era.lines);
   useInput();
 
   useEffect(() => {
@@ -95,10 +94,12 @@ function Console() {
           e.preventDefault();
         }}
       >
-        {era.lines.map((line, idx) => {
-          const lineNo = idx;
-          return <ConsoleLineElement key={lineNo} line={line} />;
-        })}
+        {era.lines
+          .concat(era.last_line ? { ...era.last_line, active: true } : [])
+          .map((line, idx) => {
+            const lineNo = idx;
+            return <ConsoleLineElement key={lineNo} line={line} />;
+          })}
         <EmueraInput />
       </EmueraBackground>
       <EmulatorSettingsDialog />

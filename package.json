@@ -1,6 +1,6 @@
 {
   "name": "erars-neu",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "erars-neutralino",
   "main": "index.js",
   "scripts": {
@@ -15,10 +15,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@gorazdo/eslint-plugin-preact": "^1.0.7",
     "@neutralinojs/neu": "^9.3.1",
+    "@preact/preset-vite": "^2.4.0",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
@@ -28,7 +29,6 @@
     "vite": "^3.1.8"
   },
   "dependencies": {
-    "@preact/preset-vite": "^2.4.0",
     "preact": "^10.11.2",
     "styled-components": "^5.3.6",
     "zustand": "^4.1.2"

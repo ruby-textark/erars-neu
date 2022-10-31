@@ -1,11 +1,13 @@
+/** Input Request Type */
 type InputRequest = {
   generation: number;
   ty: "AnyKey" | "EnterKey" | "Int" | "Str";
   timeout?: number;
   is_one: boolean;
 };
-type Color = [number, number, number];
 
+/** Console Line Types */
+type Color = [number, number, number];
 enum FontStyleBit {
   NORMAL = 0x0,
   BOLD = 0x1,
@@ -14,7 +16,6 @@ enum FontStyleBit {
   UNDERLINE = 0x8,
 }
 type FontStyle = { bits: FontStyleBit };
-
 type TextStyle = {
   color: Color;
   font_family: string;
@@ -41,20 +42,32 @@ type ConsoleLine = {
   active?: boolean;
 };
 
-type EmueraResponse = {
-  current_req: InputRequest | null;
-  rebuild: false;
+/** Emuera State Types */
+type EmueraLineState = {
   bg_color: Color;
   hl_color: Color;
-  last_line?: ConsoleLine;
   lines: ConsoleLine[];
+  last_line?: ConsoleLine;
+};
+type EmueraInputState = {
+  current_req: InputRequest;
 };
 
-type EmueraState = {
+/** Emuera Response Types */
+type EmueraLineResponse = {
+  rebuild: boolean;
+} & EmueraLineState;
+type EmueraInputResponse = InputRequest;
+
+type EmueraResponse = Partial<EmueraLineResponse> &
+  Partial<EmueraInputResponse>;
+
+type EmueraStore = {
   maxLines: number;
   read: () => Promise<void>;
   sendInput: (input?: string) => void;
-} & EmueraResponse;
+} & EmueraLineState &
+  EmueraInputState;
 
 export { FontStyleBit };
 
@@ -65,6 +78,8 @@ export type {
   LineType,
   ButtonType,
   TextStyle,
+  EmueraLineResponse,
+  EmueraInputResponse,
   EmueraResponse,
-  EmueraState,
+  EmueraStore,
 };

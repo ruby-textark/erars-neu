@@ -5,14 +5,14 @@ import { ButtonType, Color } from "../../utils/erars/types";
 import TextPart from "./Text";
 
 const Button = styled.span<{
-  hl_color: Color;
+  hl_color?: Color;
 }>`
   &.active {
     cursor: pointer;
   }
 
   &.active span:hover {
-    color: rgb(${({ hl_color }) => hl_color.join(",")});
+    color: rgb(${({ hl_color }) => hl_color?.join(",")});
   }
 `;
 

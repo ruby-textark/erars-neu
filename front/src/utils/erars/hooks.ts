@@ -1,8 +1,8 @@
-import { EmueraState, FontStyleBit } from "./types";
+import { EmueraInputResponse, EmueraStore, FontStyleBit } from "./types";
 import bridge from "./bridge";
 import create from "zustand";
 
-const useEra = create<EmueraState>((set, get) => ({
+const useEra = create<EmueraStore>((set, get) => ({
   current_req: {
     generation: 0,
     is_one: false,
@@ -16,40 +16,49 @@ const useEra = create<EmueraState>((set, get) => ({
   rebuild: false,
 
   read: async () => {
-    // Request after current line number.
-    const resp = await bridge.stdout();
-    const { lines, maxLines, read } = get();
+    for (;;) {
+      // Request after current line number.
+      const resp = await bridge.stdout();
+      const { lines, last_line, maxLines } = get();
 
-    console.log(resp);
+      console.log(resp);
 
-    // Trim empty lines.
-    const responseLines = resp.lines
-      .filter((line) => {
-        return line.parts !== undefined;
-      })
-      .concat(resp.last_line ?? []);
+      if (Object.hasOwn(resp, "ty")) {
+        set({
+          current_req: resp as EmueraInputResponse,
+        });
+        continue;
+      }
 
-    if (resp.rebuild) {
-      set(resp);
-    } else {
-      // Concatenate with existing lines.
-      let accLines = lines.concat(
-        responseLines
-          // Activate new lines
-          .map((line) => ({ ...line, active: true }))
-      );
+      resp.last_line = resp.last_line ?? undefined;
 
-      // Slice lines if the length exceeds max line cap.
-      if (accLines.length > maxLines)
-        accLines = accLines.slice(accLines.length - maxLines);
+      if (resp.rebuild === true) {
+        set(resp);
+      } else {
+        // Trim empty lines.
+        const responseLines =
+          resp.lines?.filter(({ parts }) => parts !== undefined) ?? [];
 
-      set({
-        ...resp,
-        lines: accLines,
-      });
+        // Skip unnecessary update
+        if (responseLines.length === 0) continue;
+
+        // Concatenate with existing lines.
+        let accLines = lines.concat(
+          responseLines
+            // Activate new lines
+            .map((line) => ({ ...line, active: true }))
+        );
+
+        // Slice lines if the length exceeds max line cap.
+        if (accLines.length > maxLines)
+          accLines = accLines.slice(accLines.length - maxLines);
+
+        set({
+          ...resp,
+          lines: accLines,
+        });
+      }
     }
-
-    read();
   },
 
   sendInput: (input = "") => {
