@@ -19,7 +19,7 @@ const useEra = create<EmueraStore>((set, get) => ({
     for (;;) {
       // Request after current line number.
       const resp = await bridge.stdout();
-      const { lines, last_line, maxLines } = get();
+      const { lines, maxLines } = get();
 
       console.log(resp);
 
@@ -38,9 +38,6 @@ const useEra = create<EmueraStore>((set, get) => ({
         // Trim empty lines.
         const responseLines =
           resp.lines?.filter(({ parts }) => parts !== undefined) ?? [];
-
-        // Skip unnecessary update
-        if (responseLines.length === 0) continue;
 
         // Concatenate with existing lines.
         let accLines = lines.concat(
